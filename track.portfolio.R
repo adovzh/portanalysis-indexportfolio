@@ -20,7 +20,9 @@ growth.value <- price - price[1]
 growth.rate <- log(price / price[1])
 
 # report
-portfolio.data <- cbind(Weight=index.portfolio$weight, Shares=as.vector(t(shares)))
+portfolio.data <- cbind(Stock=as.character(index.portfolio$sec),
+                        Weight=index.portfolio$weight, 
+                        Shares=as.vector(t(shares)))
 tracking.report <- cbind(price=price, growth=growth.value, rate=growth.rate)
 
 write.csv(portfolio.data, file="portfolio.data.csv")
