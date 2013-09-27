@@ -5,6 +5,7 @@ start.date <- "2013-09-02"
 
 # download data from Trading Room
 m <- importDailyClose(index.portfolio$sec, from=start.date, method="trading")
+i <- importDailyClose("XJO", from=start.date, method="index")
 
 # save csv data
-write.csv(m, file="current.data.csv")
+write.csv(cbind(m,i), file="current.data.csv")

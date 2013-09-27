@@ -15,10 +15,28 @@ tradingRoomImport <- function(symbol, from, to) {
       description=description())
 }
 
-importDailyClose <- function(symbols, method=c("yahoo", "tradingroom"), 
+tradingRoomIndexImport <- function(indexSymbol, from, to) {
+  url <- sprintf("http://www.tradingroom.com.au/apps/mkt/indexHistoryDownload.ac?idx=%s&format=csv",
+                 indexSymbol)
+  tmp <- tempfile()
+  download.file(url=url, destfile=tmp)
+  tt <- read.csv(file=tmp, skip=1)
+  tt <- tt[-nrow(tt),]
+  X <- timeSeries(tt[-1], charvec=format(as.Date(as.character(tt$Date), format="%d-%b-%Y"), "%Y-%m-%d"))
+  X <- window(X, start=from, end=to)
+  X <- X[, "Price.Index"]
+  colnames(X) <- "Close"
+  unlink(tmp)
+  new("fWEBDATA", call=match.call(), param = c(Instrument=indexSymbol, `Frequency`="daily"),
+      data=X, title="Data Import from Trading Room",
+      description=description())
+}
+
+importDailyClose <- function(symbols, method=c("yahoo", "tradingroom", "index"), 
                              from=NULL, to=Sys.timeDate()) {
   method <- match.arg(method)
-  method.func <- switch(method, yahoo=yahooImport, tradingroom=tradingRoomImport)
+  method.func <- switch(method, yahoo=yahooImport, tradingroom=tradingRoomImport,
+                        index=tradingRoomIndexImport)
   
   r <- lapply(symbols, function(symbol) {
     retryCounter <- 0
