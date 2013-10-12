@@ -1,7 +1,7 @@
 source("import.R")
 
 index.portfolio <- read.csv(file="index.portfolio.csv")
-start.date <- "2013-09-02"
+start.date <- "2013-08-30"
 
 # download data from Trading Room
 m <- importDailyClose(index.portfolio$sec, from=start.date, method="trading")

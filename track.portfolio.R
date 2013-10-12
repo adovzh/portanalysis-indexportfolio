@@ -14,7 +14,7 @@ current.data <- current.data[,portfolio.stocks]
 stopifnot(portfolio.stocks == names(current.data))
 
 # calculate shares
-start.date <- "2013-09-02"
+start.date <- "2013-08-30"
 money.share <- round(1e8 * index.portfolio$weight, digits=2)
 shares <- floor(money.share / current.data[start.date,])
 buyPrices <- as.vector(series(current.data[start.date,]))
